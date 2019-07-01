@@ -1,3 +1,13 @@
+# ⚠️特别注意
+1. 工程目录结构中不能有 `(` 和 `)` ，否则在索引的时候会找不到该目录下的所有源文件
+2. SwiftShield对项目做了clean和build的操作，必须确保原工程文件能够Xcode编译通过才行，在swiftshield的源代码文件XcodeProjectBuilder.swift的第41~44行对编译结果进行了判断, SwiftShield运行时最好关闭Xcode，可以修改swiftshield-Sources/Modes/XcodeProjectBuilder.swift注掉相关的代码节省编译时间
+3. 混淆过后Xib相关的文件名在必须修改为所对应的类混淆后的类名，Xib中链接的方法名未被正确混淆的需要删除重新建立链接
+4. 可选的代理方法会被混淆, 但是调用处需要手动修改
+4. 带字符串的函数传参不能出现中文，否则会使后面的函数混淆出错，带中文字符的参数可以定义为let字符串常量再代入函数传参, 或者将后面带有函数的传参前回车另起一行，以避免混淆出错
+5. 带有` is `判断的无法被正确混淆需要手动修改
+6. 通过字符串转化的类名和函数名无法被正确混淆,需要手动修改
+7. Xib以及字符串相关混淆问题无法通过编译发现, 能正常编译通过但是运行时会崩溃, 需要特别注意
+
 # -> 中文文档
 
 <img src="http://i.imgur.com/0ksj7Gh.png" alt="SwiftShield logo" height="140" >
@@ -20,7 +30,6 @@ class EbnaVwSSHIWHeIRrFLtFSYnTgvRgTTpo: jXDJKvNJeYqaQvdEOlpEpUJrdBmNMFaH {
 ## 🤖 自动模式 (仅限Swift)
 
 使用 `-automatic` 标记, SwiftShield将使用 SourceKit 自动混淆整个工程(包括依赖项).特别的, SwiftShield自动模式[并不会重构所有内容](SOURCEKITISSUES.md), 它的范围与Xcode的自带重构工具的范围直接相关. 虽然文档中的特定案例不会被混淆，但SwiftShield将对所有可以进行逆向工程的Swift类和方法进行混淆. 看一下示例项目，看看SwiftShield是如何工作的!
-
 
 ## 🛡 手动模式 (Swift/OBJ-C)
 
